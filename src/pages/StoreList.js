@@ -47,7 +47,7 @@ const StoreList = () => {
   }, []);
 
   const handleCardClick = (storeId) => {
-    navigate(`/React-Test01/store-entry/qr-code/${storeId}`);
+    navigate(`/store-entry/qr-code/${storeId}`);
   };
 
   return (

@@ -19,23 +19,23 @@ import QrCodePage from './pages/QrCodePage'; // 新しく作成したQrCodePage�
 const App = () => {
   return (
     <AuthProvider>
-      <Router >
+      <Router basename="/React-Test01">
         <CssBaseline />
         <div className="app-container">
           <Navbar />
           <div className="content">
             <Spacer height="64px" /> {/* AppBarの高さ分のスペース */}
             <Routes>
-              <Route path="/React-Test01/" element={<Home />} />
-              <Route path="/React-Test01/news" element={<NewsPage />} />
-              <Route path="/React-Test01/blog" element={<BlogPage />} />
-              <Route path="/React-Test01/store-entry" element={<StoreEntry />} />
-              <Route path="/React-Test01/coupons" element={<Coupons />} /> {/* クーポンルートを保護 */}
-              <Route path="/React-Test01/ping" element={<Ping />} />
-              <Route path="/React-Test01/register" element={<Register />} />
-              <Route path="/React-Test01/login" element={<Login />} />
-              <Route path="/React-Test01/account-info" element={<AccountInfo />} />
-              <Route path="/React-Test01/store-entry/qr-code/:storeId" element={<QrCodePage/>} />
+              <Route path="/" element={<Home />} />
+              <Route path="/news" element={<NewsPage />} />
+              <Route path="/blog" element={<BlogPage />} />
+              <Route path="/store-entry" element={<StoreEntry />} />
+              <Route path="/coupons" element={<Coupons />} /> {/* クーポンルートを保護 */}
+              <Route path="/ping" element={<Ping />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/account-info" element={<AccountInfo />} />
+              <Route path="/store-entry/qr-code/:storeId" element={<QrCodePage/>} />
             </Routes>
             <Spacer height="56px" /> {/* BottomNavの高さ分のスペース */}
           </div>
