@@ -1,0 +1,51 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.content {
+  flex: 1;
+  padding-left: 20px;
+  padding-right: 20px;
+  overflow-y: auto; /* コンテンツが溢れる場合にスクロール可能にする */
+  overflow: hidden; /* 全体のオーバーフローを隠す */
+}
+
+.card {
+  background-color: #f0f0f0; /* 背景色を設定してカードの境界を確認 */
+  margin: 20px 0;
+  padding: 20px;
+  text-align: center;
+  font-size: 24px;
+  color: #333;
+}
+
+.card h1 {
+  font-size: 24px;
+  margin: 0 0 10px 0;
+}
+
+.card h2 {
+  font-size: 20px;
+  margin: 0 0 5px 0;
+}
+
+.card p {
+  font-size: 16px;
+  margin: 0;
+}
+
+.bottom-nav {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+}

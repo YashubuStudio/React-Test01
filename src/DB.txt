@@ -1,0 +1,180 @@
+### データベース構造
+
+#### 1. ユーザー用データベース
+
+##### テーブル: `Users`
+ユーザー情報を格納します。
+- `user_id` (主キー): ユーザーID
+- `email`: メールアドレス
+- `password_hash`: パスワードのハッシュ
+- `name`: 氏名
+- `phone`: 電話番号
+- `role`: ユーザーの役割（`user`, `owner`, `delivery`, 'admin'）
+- `created_at`: アカウント作成日時
+- `updated_at`: 最終更新日時
+
+本番環境では、UserProfilesを削除し、AWSで一括保存する
+- `address`: 住所
+- `date_of_birth`: 生年月日
+- `additional_info`: その他の情報
+
+##### テーブル: `UserProfiles`
+ユーザーの追加情報を格納します。
+- `user_id` (外部キー): ユーザーID
+- `profile_picture`: プロフィール写真のURL
+- `address`: 住所
+- `date_of_birth`: 生年月日
+- `additional_info`: その他の情報
+
+##### テーブル: `UserSessions`
+ユーザーのセッション情報を格納します。
+- `session_id` (主キー): セッションID
+- `user_id` (外部キー): ユーザーID
+- `login_time`: ログイン日時
+- `logout_time`: ログアウト日時
+- `device_info`: デバイス情報
+
+##### テーブル: `AccessLogs`
+ユーザーのアクセスログを格納します。
+- `log_id` (主キー): ログID
+- `user_id` (外部キー): ユーザーID
+- `store_id` (外部キー): 店舗ID
+- `access_time`: アクセス日時
+- `access_type`: アクセスタイプ（`entry`, `exit`）
+- `role`: 入店者の役割（`user`, `owner`, `delivery`）
+
+##### テーブル: `TempAccessCodes`
+一時アクセスコードを格納します。
+- `code_id` (主キー): コードID
+- `user_id` (外部キー): ユーザーID
+- `store_id` (外部キー): 店舗ID
+- `access_code`: アクセスコード
+- `expiry_time`: 有効期限
+- `status`: ステータス（`active`, `inactive`）
+
+##### テーブル: `UserEntry`
+ユーザーの入店状況を格納します。
+- `user_id` (主キー): ユーザーID
+- `entry`: 入店状況（`entry`, `exit`）
+- `last_access_code`: 最後に使用した入店用一時キー
+- `last_login_time`: 最終入店時間
+
+#### 2. 店舗・オーナー用データベース
+
+##### テーブル: `Stores`
+店舗情報を格納します。
+- `store_id` (主キー): 店舗ID
+- `owner_id` (外部キー): ユーザーID（`owner`として登録されたユーザーのID）
+- `store_name`: 店舗名
+- `address`: 店舗の住所
+- `phone`: 店舗の電話番号
+- `status`: 開店状況（`preparation`, `open`, `closed`, `closed_permanently`）
+- `opening_date`: 開業日
+- `created_at`: 店舗登録日時
+- `updated_at`: 最終更新日時
+
+### テーブル間のリレーション
+
+- `Users`と`UserProfiles`: 1対1の関係（`user_id`）
+- `Users`と`UserSessions`: 1対多の関係（`user_id`）
+- `Users`と`AccessLogs`: 1対多の関係（`user_id`）
+- `Users`と`TempAccessCodes`: 1対多の関係（`user_id`）
+- `Users`と`UserEntry`: 1対1の関係（`user_id`）
+- `Stores`と`Users`: 多対1の関係（`owner_id`）
+- `Stores`と`AccessLogs`: 1対多の関係（`store_id`）
+- `Stores`と`TempAccessCodes`: 1対多の関係（`store_id`）
+
+### データベーススキーマ例
+
+#### `Users`テーブル
+```sql
+CREATE TABLE Users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    phone VARCHAR(50),
+    role ENUM('user', 'owner', 'delivery') DEFAULT 'user',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+```
+
+#### `UserProfiles`テーブル
+```sql
+CREATE TABLE UserProfiles (
+    user_id INT PRIMARY KEY,
+    profile_picture VARCHAR(255),
+    address VARCHAR(255),
+    date_of_birth DATE,
+    additional_info TEXT,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+```
+
+#### `UserSessions`テーブル
+```sql
+CREATE TABLE UserSessions (
+    session_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    login_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    logout_time TIMESTAMP,
+    device_info VARCHAR(255),
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+```
+
+#### `AccessLogs`テーブル
+```sql
+CREATE TABLE AccessLogs (
+    log_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    store_id INT,
+    access_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    access_type ENUM('entry', 'exit'),
+    role ENUM('user', 'owner', 'delivery'),
+    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    FOREIGN KEY (store_id) REFERENCES Stores(store_id)
+);
+```
+
+#### `TempAccessCodes`テーブル
+```sql
+CREATE TABLE TempAccessCodes (
+    code_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    store_id INT,
+    access_code VARCHAR(255),
+    expiry_time TIMESTAMP,
+    status ENUM('active', 'inactive'),
+    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    FOREIGN KEY (store_id) REFERENCES Stores(store_id)
+);
+```
+
+#### `UserEntry`テーブル
+```sql
+CREATE TABLE UserEntry (
+    user_id INT PRIMARY KEY,
+    entry ENUM('entry', 'exit'),
+    last_access_code VARCHAR(255),
+    last_login_time TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+```
+
+#### `Stores`テーブル
+```sql
+CREATE TABLE Stores (
+    store_id INT AUTO_INCREMENT PRIMARY KEY,
+    owner_id INT,
+    store_name VARCHAR(255),
+    address VARCHAR(255),
+    phone VARCHAR(50),
+    status ENUM('preparation', 'open', 'closed', 'closed_permanently'),
+    opening_date DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (owner_id) REFERENCES Users(user_id)
+);
+```
