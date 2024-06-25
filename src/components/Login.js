@@ -15,7 +15,7 @@ const Login = () => {
     e.preventDefault();
     try {
       await login(email, password);
-      navigate('/account-info');
+      navigate('/React-Test01/account-info');
     } catch (error) {
       console.error('Login failed:', error);
       setError('ログインに失敗しました。メールアドレスまたはパスワードを確認してください。');

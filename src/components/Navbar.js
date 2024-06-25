@@ -10,11 +10,11 @@ const Navbar = () => {
   return (
     <AppBar position="fixed">
       <Toolbar style={{ justifyContent: 'space-between' }}>
-        <IconButton edge="start" color="inherit" aria-label="account" component={Link} to="/account-info" sx={{ transform: 'scale(2)' }}>
+        <IconButton edge="start" color="inherit" aria-label="account" component={Link} to="/React-Test01/account-info" sx={{ transform: 'scale(2)' }}>
           <AccountCircle />
         </IconButton>
         <Typography variant="h6" style={{ flexGrow: 1, textAlign: 'center' }}>
-          <Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>
+          <Link to="/React-Test01/" style={{ color: 'inherit', textDecoration: 'none' }}>
             ロゴ
           </Link>
         </Typography>
@@ -23,7 +23,7 @@ const Navbar = () => {
             ログアウト
           </Button>
         ) : (
-          <Button color="inherit" component={Link} to="/login">
+          <Button color="inherit" component={Link} to="/React-Test01/login">
             ログイン
           </Button>
         )}

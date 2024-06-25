@@ -24,7 +24,7 @@ const Register = () => {
       await api.post('/api/register', { email, password, name });
       setSuccess('ユーザー登録に成功しました。');
       setError('');
-      navigate('/login');
+      navigate('/React-Test01/login');
     } catch (error) {
       console.error('Registration failed:', error);
       setError('ユーザー登録に失敗しました。');

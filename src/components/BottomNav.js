@@ -12,13 +12,13 @@ const BottomNav = () => {
 
   useEffect(() => {
     switch (location.pathname) {
-      case '/':
+      case '/React-Test01/':
         setValue(0);
         break;
-      case '/store-entry':
+      case '/React-Test01/store-entry':
         setValue(1);
         break;
-      case '/coupons':
+      case '/React-Test01/coupons':
         setValue(2);
         break;
       default:
@@ -30,13 +30,13 @@ const BottomNav = () => {
     setValue(newValue);
     switch (newValue) {
       case 0:
-        navigate('/');
+        navigate('/React-Test01/');
         break;
       case 1:
-        navigate('/store-entry');
+        navigate('/React-Test01/store-entry');
         break;
       case 2:
-        navigate('/coupons');
+        navigate('/React-Test01/coupons');
         break;
       default:
         break;
