@@ -19,7 +19,7 @@ import QrCodePage from './pages/QrCodePage'; // 新しく作成したQrCodePage�
 const App = () => {
   return (
     <AuthProvider>
-      <Router>
+      <Router basename="/React-Test01">
         <CssBaseline />
         <div className="app-container">
           <Navbar />
