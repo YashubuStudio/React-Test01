@@ -32,6 +32,3 @@ pingが解放されているかの確認
 
 WindowsDefenderファイアウォールの設定
     Allow 3000を実行することで、ファイアウォールの解放が可能（原則無効）
-
-
-GitToken：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
